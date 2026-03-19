@@ -24,14 +24,10 @@ RUN curl -fsSL "https://raw.githubusercontent.com/NousResearch/hermes-agent/${HE
 RUN NPM_CONFIG_PREFIX=/home/agent/.local npm install -g @openai/codex@${CODEX_VERSION}
 
 RUN cd /home/agent/hermes-agent \
-    && audit_status=0 \
-    && { npm audit fix >/dev/null || audit_status=$?; } \
-    && if [ "$audit_status" -ne 0 ] && [ "$audit_status" -ne 1 ]; then exit "$audit_status"; fi
+    && (npm audit fix >/dev/null || [ $? -eq 1 ])
 
 RUN cd /home/agent/hermes-agent/scripts/whatsapp-bridge \
-    && audit_status=0 \
-    && { npm audit fix >/dev/null || audit_status=$?; } \
-    && if [ "$audit_status" -ne 0 ] && [ "$audit_status" -ne 1 ]; then exit "$audit_status"; fi
+    && (npm audit fix >/dev/null || [ $? -eq 1 ])
 
 RUN HERMES_HOME=/home/agent/.hermes HOME=/home/agent hermes skills list >/dev/null
 
