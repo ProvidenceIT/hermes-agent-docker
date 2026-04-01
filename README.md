@@ -14,9 +14,21 @@ The image in this repo:
 
 ### Build locally
 
+Build the latest `main` by default:
+
 ```bash
 docker build -t hermes-agent-docker:local .
 ```
+
+Build a specific Hermes tag:
+
+```bash
+docker build \
+  --build-arg HERMES_REF=v2026.3.30 \
+  -t hermes-agent-docker:v2026.3.30 .
+```
+
+`HERMES_REF` defaults to `main` and can point to either a branch or a tag.
 
 ### Run Hermes
 

@@ -1,7 +1,7 @@
 FROM docker/sandbox-templates:shell
 
 ARG HERMES_REF=main
-ARG CODEX_VERSION=0.116.0
+ARG CODEX_VERSION=0.118.0
 
 COPY docker-entrypoint.sh /usr/local/bin/hermes-entrypoint
 
