@@ -8,6 +8,12 @@ on:
       - "v*"
   pull_request:
   workflow_dispatch:
+    inputs:
+      hermes_ref:
+        description: Hermes git ref to build (branch or tag)
+        required: false
+        default: main
+        type: string
 
 env:
   REGISTRY: ghcr.io
@@ -48,12 +54,15 @@ jobs:
             type=ref,event=tag
             type=sha
             type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=${{ inputs.hermes_ref }},enable=${{ github.event_name == 'workflow_dispatch' && inputs.hermes_ref != '' }}
 
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
+          build-args: |
+            HERMES_REF=${{ inputs.hermes_ref || 'main' }}
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
